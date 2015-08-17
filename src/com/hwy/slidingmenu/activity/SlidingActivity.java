@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2012 yueyueniao
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.hwy.slidingmenu.activity;
 
 import android.os.Bundle;
@@ -27,24 +12,27 @@ import com.hwy.slidingmenu.fragment.ViewPageFragment.MyPageChangeListener;
 import com.hwy.slidingmenu.view.SlidingMenu;
 
 public class SlidingActivity extends FragmentActivity {
-	SlidingMenu mSlidingMenu;
-	LeftFragment leftFragment;
-	RightFragment rightFragment;
+	
+	SlidingMenu mSlidingMenu;// slidingMenu
+	LeftFragment leftFragment; // 左侧菜单
+	RightFragment rightFragment;// 右侧菜单
 	ViewPageFragment viewPageFragment;
 
 	@Override
 	protected void onCreate(Bundle arg0) {
 		super.onCreate(arg0);
 		setContentView(R.layout.main);
-		init();
+		init();// 初始化视图
 		initListener();
 
 	} 
 
 	private void init() {
 		mSlidingMenu = (SlidingMenu) findViewById(R.id.slidingMenu);
+		// 设置菜单视图
 		mSlidingMenu.setLeftView(getLayoutInflater().inflate(
 				R.layout.left_frame, null));
+		// 设置右侧视图
 		mSlidingMenu.setRightView(getLayoutInflater().inflate(
 				R.layout.right_frame, null));
 		mSlidingMenu.setCenterView(getLayoutInflater().inflate(
@@ -52,6 +40,7 @@ public class SlidingActivity extends FragmentActivity {
 
 		FragmentTransaction t = this.getSupportFragmentManager()
 				.beginTransaction();
+		
 		leftFragment = new LeftFragment();
 		t.replace(R.id.left_frame, leftFragment);
 

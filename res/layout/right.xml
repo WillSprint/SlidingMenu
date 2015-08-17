@@ -13,7 +13,10 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:gravity="center_vertical"
+            android:paddingEnd="0.0dp"
             android:paddingLeft="20dp"
+            android:paddingRight="0.0dp"
+            android:paddingStart="20dp"
             android:text="我的消息"
             android:textColor="@color/black"
             android:textSize="15sp" />
@@ -21,9 +24,9 @@
         <include
             android:id="@+id/line"
             android:layout_width="fill_parent"
-            android:layout_height="2px"
-            layout="@layout/line"
-            android:layout_below="@+id/title" >
+            android:layout_height="2dp"
+            android:layout_below="@+id/title"
+            layout="@layout/line" >
         </include>
 
         <ListView
@@ -32,7 +35,6 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/line" >
         </ListView>
-        
     </RelativeLayout>
 
 </RelativeLayout>
