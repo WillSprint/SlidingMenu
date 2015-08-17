@@ -41,6 +41,22 @@ public class SlidingMenu extends RelativeLayout {
 		init(context);
 	}
 
+	public SlidingMenu(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		init(context);
+	}
+
+	public SlidingMenu(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+		init(context);
+	}
+
+	public void addViews(View left, View center, View right) {
+		setLeftView(left);
+		setRightView(right);
+		setCenterView(center);
+	}
+
 	private void init(Context context) {
 		
 		mContext = context;
@@ -64,27 +80,9 @@ public class SlidingMenu extends RelativeLayout {
 		bgShade.setLayoutParams(bgParams);
 
 	}
-
-	public SlidingMenu(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		init(context);
-	}
-
-	public SlidingMenu(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-		init(context);
-	}
-
-	public void addViews(View left, View center, View right) {
-		setLeftView(left);
-		setRightView(right);
-		setCenterView(center);
-	}
-
+	
 	// 设置菜单视图
 	public void setLeftView(View view) {
-//		LayoutParams behindParams = new LayoutParams(LayoutParams.WRAP_CONTENT,
-//		LayoutParams.FILL_PARENT);// 这里不赞成使用 FILL_PARENT ,所以改为 MATCH_PARENT
 		LayoutParams behindParams = new LayoutParams(LayoutParams.WRAP_CONTENT,
 				LayoutParams.MATCH_PARENT);
 		addView(view, behindParams);
@@ -92,8 +90,6 @@ public class SlidingMenu extends RelativeLayout {
 	}
 
 	public void setRightView(View view) {
-//		LayoutParams behindParams = new LayoutParams(LayoutParams.WRAP_CONTENT,
-//				LayoutParams.FILL_PARENT);
 		LayoutParams behindParams = new LayoutParams(LayoutParams.WRAP_CONTENT,
 				LayoutParams.MATCH_PARENT);
 		behindParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
@@ -102,8 +98,6 @@ public class SlidingMenu extends RelativeLayout {
 	}
 
 	public void setCenterView(View view) {
-//		LayoutParams aboveParams = new LayoutParams(LayoutParams.FILL_PARENT,
-//				LayoutParams.FILL_PARENT);
 		LayoutParams aboveParams = new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT);
 
@@ -159,8 +153,57 @@ public class SlidingMenu extends RelativeLayout {
 		canSlideRight = right;
 	}
 
+	/*
+	 * 显示左侧边的view
+	 */
+	public void showLeftView() {
+		int menuWidth = mMenuView.getWidth();
+		int oldScrollX = mSlidingView.getScrollX();
+		if (oldScrollX == 0) {
+			mMenuView.setVisibility(View.VISIBLE);
+			mDetailView.setVisibility(View.INVISIBLE);
+			smoothScrollTo(-menuWidth);
+			tCanSlideLeft = canSlideLeft;
+			tCanSlideRight = canSlideRight;
+			hasClickLeft = true;
+			setCanSliding(true, false);
+		} else if (oldScrollX == -menuWidth) {
+			smoothScrollTo(menuWidth);
+			if (hasClickLeft) {
+				hasClickLeft = false;
+				setCanSliding(tCanSlideLeft, tCanSlideRight);
+			}
+		}
+	}
+
+	/*
+	 * 显示右侧边的view
+	 */
+	public void showRightView() {
+		int menuWidth = mDetailView.getWidth();
+		int oldScrollX = mSlidingView.getScrollX();
+		if (oldScrollX == 0) {
+			mMenuView.setVisibility(View.INVISIBLE);
+			mDetailView.setVisibility(View.VISIBLE);
+			smoothScrollTo(menuWidth);
+			tCanSlideLeft = canSlideLeft;
+			tCanSlideRight = canSlideRight;
+			hasClickRight = true;
+			setCanSliding(false, true);
+		} else if (oldScrollX == menuWidth) {
+			smoothScrollTo(-menuWidth);
+			if (hasClickRight) {
+				hasClickRight = false;
+				setCanSliding(tCanSlideLeft, tCanSlideRight);
+			}
+		}
+	}
 	
-	/*拦截touch事件*/
+	/*
+	 * 拦截touch事件
+	 * (non-Javadoc)
+	 * @see android.view.ViewGroup#onInterceptTouchEvent(android.view.MotionEvent)
+	 */
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
 
@@ -371,50 +414,6 @@ public class SlidingMenu extends RelativeLayout {
 		mScroller.startScroll(oldScrollX, mSlidingView.getScrollY(), dx,
 				mSlidingView.getScrollY(), duration);
 		invalidate();
-	}
-
-	/*
-	 * 显示左侧边的view
-	 * */
-	public void showLeftView() {
-		int menuWidth = mMenuView.getWidth();
-		int oldScrollX = mSlidingView.getScrollX();
-		if (oldScrollX == 0) {
-			mMenuView.setVisibility(View.VISIBLE);
-			mDetailView.setVisibility(View.INVISIBLE);
-			smoothScrollTo(-menuWidth);
-			tCanSlideLeft = canSlideLeft;
-			tCanSlideRight = canSlideRight;
-			hasClickLeft = true;
-			setCanSliding(true, false);
-		} else if (oldScrollX == -menuWidth) {
-			smoothScrollTo(menuWidth);
-			if (hasClickLeft) {
-				hasClickLeft = false;
-				setCanSliding(tCanSlideLeft, tCanSlideRight);
-			}
-		}
-	}
-
-	/*显示右侧边的view*/
-	public void showRightView() {
-		int menuWidth = mDetailView.getWidth();
-		int oldScrollX = mSlidingView.getScrollX();
-		if (oldScrollX == 0) {
-			mMenuView.setVisibility(View.INVISIBLE);
-			mDetailView.setVisibility(View.VISIBLE);
-			smoothScrollTo(menuWidth);
-			tCanSlideLeft = canSlideLeft;
-			tCanSlideRight = canSlideRight;
-			hasClickRight = true;
-			setCanSliding(false, true);
-		} else if (oldScrollX == menuWidth) {
-			smoothScrollTo(-menuWidth);
-			if (hasClickRight) {
-				hasClickRight = false;
-				setCanSliding(tCanSlideLeft, tCanSlideRight);
-			}
-		}
 	}
 
 }
